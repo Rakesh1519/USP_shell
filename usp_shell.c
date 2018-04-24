@@ -196,9 +196,7 @@ int main(int argc, char **argv)
         long bufsize = 0;
         getline(&cmd, &bufsize, stdin); // no need to allocate memory getline will allocate on its own
 		        
-		put_history(cmd);
-		
-        char *dub = strdup(cmd);
+		char *dub = strdup(cmd);
         char **args = malloc(NUM_TOKEN * sizeof(char*));
         char *token = strtok(cmd, DELIMITERS);
 
@@ -218,8 +216,17 @@ int main(int argc, char **argv)
             token = strtok(NULL, DELIMITERS);
             i++;
         }
-
-        args[i] = NULL;
+        
+        if (strcmp(args[0], "incog") == 0) {
+            for(int j=0;j<i-1;j++)
+                args[j] = args[j+1];
+            args[--i] = NULL;
+        	printf("here\n");
+        }
+        else {
+            put_history(cmd);
+            args[i] = NULL;
+        }
 
         if(args) {
             if(*args[i - 1] == '\\') {
